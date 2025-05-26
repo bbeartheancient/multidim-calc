@@ -4,13 +4,13 @@ These python scripts demonstrate the validity of a new kind of math that scales 
 
 This repo includes the following scripts (all scripts in beta but core functionality is working):
 
-8D Circle:
+8D Circle (8D circle 3.py):
   - models the effect of time compression of higher dimensional expressions of a base frequency (1D) as it travels through multi dimensional space, creating the illusion of independent movement
 
-Multidimensional Calculator:
+Multidimensional Calculator (multidimensional calculator.py):
   - shows the equivalent values, sums, differences, and phase angle path of any two values in any dimension with adjustable spectral path. Defaults to pi @ 3d,3d
 
-Elemental Explorer:
+Elemental Explorer (elements 1.16.42.py):
   - shows the relative position of other elements to oxygen based on their resonant frequency and density
   - only 31 elements added so far
   - phase offsets could be refined for higher resolution
