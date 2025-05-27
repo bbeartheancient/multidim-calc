@@ -15,6 +15,10 @@ Elemental Explorer (elements 1.16.42.py):
   - only 31 elements added so far
   - phase offsets could be refined for higher resolution
 
+Solar Simulation (solar simulation.py):
+  - simulates the orbits and starting positions of our solar system
+  - changing origin point simulates planetary perspective
+  - origin points like 6,1 and 7,1 boost detection of planets with earth-like phases, suggesting that the sum of two observations of distant solar systems may reveal more inner planets, and that heavy outer planets act as a cosmic camoflauge that prevent inner planet detection
 
 currently these scripts are just a proof of concept but the math used for the dimensional scaling proves that evolutionary pathways begin in lower dimensional expressions and grow outward like a seed until their internal phase reinforcement creates a high enough signal to cause 8th dimensional peturbations that drive evolution. so in a sense we are evolving because we have always been evolving from our base elements, and the third dimension is just one stop in a multidimensional evolutionary chain.
 
