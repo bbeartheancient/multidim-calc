@@ -54,7 +54,7 @@ def get_true_anomaly(M_deg, e):
     nu = 2 * math.atan2(math.sqrt(1 + e) * math.sin(E / 2), math.sqrt(1 - e) * math.cos(E / 2))
     return nu
 
-# Initial true anomalies at J2000
+# Initial true anomalies at J2000 and real-world semi-major axes
 initial_true_anomalies = []
 orbital_data = [
     (0.387, 0.205630, 174.796),  # Mercury
@@ -62,10 +62,11 @@ orbital_data = [
     (1.000, 0.016708, 358.617),  # Earth
     (1.524, 0.093400, 19.373),   # Mars
     (5.204, 0.048498, 20.020),   # Jupiter
-    (9.582, 0.055508, 317.020),  # Saturn
-    (19.191, 0.046381, 141.050), # Uranus
-    (30.033, 0.008678, 256.228)  # Neptune
+    (9.583, 0.055508, 317.020),  # Saturn
+    (19.200, 0.046381, 141.050), # Uranus
+    (30.017, 0.008678, 256.228)  # Neptune
 ]
+real_a = [0.387, 0.723, 1.000, 1.524, 5.204, 9.583, 19.200, 30.017]  # Real-world AU
 for a, e, M in orbital_data:
     nu = get_true_anomaly(M, e)
     initial_true_anomalies.append(nu)
@@ -73,7 +74,7 @@ for a, e, M in orbital_data:
 # Planet masses (Earth masses)
 planet_masses = [0.0553, 0.815, 1.000, 0.107, 317.83, 95.16, 14.54, 17.15]
 
-def get_orbital_parameters(i, scaled_table, t, multiplier, period):
+def get_orbital_parameters(i, scaled_table, t, multiplier, period, origin_row, origin_col):
     actual_parameters = [
         (57.9e6 / 149.6e6, 0.205630),  # Mercury
         (108.2e6 / 149.6e6, 0.006772), # Venus
@@ -84,8 +85,10 @@ def get_orbital_parameters(i, scaled_table, t, multiplier, period):
         (2872.5e6 / 149.6e6, 0.046381),# Uranus
         (4495.1e6 / 149.6e6, 0.008678) # Neptune
     ]
-    base_a = scaled_table[i][i] / 149.6e6
     actual_a, actual_e = actual_parameters[i]
+    # Scale real-world a based on matrix value
+    matrix_scale = original_table[origin_row][origin_col] / original_table[2][2]  # Relative to (3D, 3D)
+    base_a = real_a[i] * matrix_scale
     target_a = 1.0
     if base_a == 0:
         return base_a, 0.0
@@ -135,7 +138,7 @@ def update_plot(t):
     eccentricities = []
     angles = []
     for i in range(8):
-        a, e = get_orbital_parameters(i, scaled_table, t, multiplier, period)
+        a, e = get_orbital_parameters(i, scaled_table, t, multiplier, period, origin_row, origin_col)
         semi_major_axes.append(a)
         eccentricities.append(e)
         theta = (initial_true_anomalies[i] + pi * t) % (2 * pi)
@@ -152,12 +155,12 @@ def update_plot(t):
             if i != j:
                 weighted_cos_sum += weights[j] * math.cos(angles[i] - angles[j])
                 weight_sum += weights[j]
-        alignment_factor = (weighted_cos_sum / weight_sum + 1) / 2  # Normalize to [0, 1]
+        alignment_factor = (weighted_cos_sum / weight_sum + 1) / 2
         alignment_factors.append(alignment_factor)
 
     # Dynamic detectability, normalized to Earth at a=1 AU
     detectability = []
-    earth_ref_det = 1.0  # mass_Earth * 1.0^2 * 1.0 * 1.0 * 1.0 = 1.0
+    earth_ref_det = 1.0
     venus_idx = 1
     earth_idx = 2
     for i, a in enumerate(semi_major_axes):
@@ -169,8 +172,8 @@ def update_plot(t):
             if i == earth_idx:
                 angle_diff = abs(angles[earth_idx] - angles[venus_idx])
                 min_diff = min(angle_diff, 2 * pi - angle_diff)
-                if min_diff < math.radians(10):  # Within 10°
-                    phase_boost = 2.5 if origin_row == 6 and origin_col == 4 else 1.8  # (7D,1D)
+                if min_diff < math.radians(10):
+                    phase_boost = 2.5 if origin_row == 5 and origin_col == 0 else 1.8
             det = (planet_masses[i] * a**2) * (1 + 0.5 * math.sin(2 * math.pi * t / (2 * period))) * alignment_factors[i] * proximity_factor * phase_boost / earth_ref_det
         detectability.append(det)
     total_det = sum(detectability)
