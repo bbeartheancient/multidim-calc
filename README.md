@@ -10,6 +10,9 @@ This repo includes the following scripts (all scripts in beta but core functiona
 Multidimensional Calculator (multidimensional calculator.py):
   - shows the equivalent values, sums, differences, and phase angle path of any two values in any dimension with adjustable spectral path. Defaults to pi @ 3d,3d
 
+Orb Generator (orb generator.py):
+  - outputs multidimensional hypersphere to blender file 
+
 Elemental Explorer (elements 1.16.42.py):
   - shows the relative position of other elements to oxygen based on their resonant frequency and density
   - only 31 elements added so far
