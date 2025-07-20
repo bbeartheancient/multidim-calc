@@ -13,10 +13,13 @@ Multidimensional Calculator (multidimensional calculator.py):
 Orb Generator (orb generator.py):
   - outputs multidimensional hypersphere to blender file 
 
-Elemental Explorer (elements 1.16.42.py):
+Elemental Explorer (elements1.16.42.py):
+  - run in --interactive mode for phase tracking
   - shows the relative position of other elements to oxygen based on their resonant frequency and density
   - only 31 elements added so far
   - phase offsets could be refined for higher resolution
+  - 7/20/2025: fixed lissajous display
+  - still a WiP, not 100%
 
 Solar Simulation (solar simulation.py):
   - simulates the orbits and starting positions of our solar system
